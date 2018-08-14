@@ -17,7 +17,11 @@
 #
 # https://linuxfr.org/users/manatlan/journaux/portage-de-taptempo-en-python-2-7
 
-import sys,termios,tty,datetime
+import sys
+import termios
+import tty
+import datetime
+
 
 def getKey():
     fd = sys.stdin.fileno()
@@ -29,10 +33,16 @@ def getKey():
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return ch
 
-print "tapTempo : press any key (q for quit)"
-t=[]
-while getKey()!="q":
-    t.append( datetime.datetime.now() )
-    ll=[ (j-i).microseconds for i, j in zip(t[:-1], t[1:]) ][-5:]
-    if ll: print "BPM:",60000000*len(ll)/sum(ll)
 
+def main():
+    print("tapTempo : press any key (q for quit)")
+    t = []
+    while getKey() != "q":
+        t.append(datetime.datetime.now())
+        ll = [(j - i).microseconds for i, j in zip(t[:-1], t[1:])][-5:]
+        if ll:
+            print("BPM: %d" % (60000000 * len(ll) / sum(ll)))
+
+
+if __name__ == '__main__':
+    main()
